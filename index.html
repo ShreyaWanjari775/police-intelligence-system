@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLICE INTEL - Police Operations & Crime Intelligence System</title>
+
+    <!-- Google Fonts: Anton & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Application Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- =====================================================
+         FIXED HEADER / NAVBAR
+    ====================================================== -->
+    <header>
+        <div class="logo" onclick="switchView('home')">
+            <i class="fa-solid fa-shield-halved"></i>
+            POLICE<span>INTEL</span>
+        </div>
+
+        <nav id="main-nav">
+            <a href="javascript:void(0)" data-view="home" class="active" onclick="switchView('home')">Home</a>
+            <a href="javascript:void(0)" data-view="complaints" onclick="switchView('complaints')">Complaints</a>
+            <a href="javascript:void(0)" data-view="incidents" onclick="switchView('incidents')">Incidents</a>
+            <a href="javascript:void(0)" data-view="firs" onclick="switchView('firs')">FIR</a>
+            <a href="javascript:void(0)" data-view="cases" onclick="switchView('cases')">Cases</a>
+            <a href="javascript:void(0)" data-view="evidence" onclick="switchView('evidence')">Evidence</a>
+            <a href="javascript:void(0)" data-view="officers" onclick="switchView('officers')">Officers</a>
+            <a href="javascript:void(0)" data-view="court" onclick="switchView('court')">Court</a>
+            <a href="javascript:void(0)" data-view="reports" onclick="switchView('reports')">Reports</a>
+        </nav>
+
+        <div class="header-actions">
+            <!-- Global Search Bar -->
+            <div class="global-search-container">
+                <i class="fa-solid fa-magnifying-glass global-search-icon"></i>
+                <input type="text" id="global-search-input" class="global-search-input" placeholder="Search database...">
+            </div>
+
+            <!-- User Auth Badge or Login Button -->
+            <div id="auth-status-container"></div>
+
+            <div class="menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         HOME VIEW (DASHBOARD & PRESENTATION SECTIONS)
+    ====================================================== -->
+    <div id="view-home" class="home-section">
+
+        <!-- Hero Banner -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="small-title">
+                    POLICE OPERATIONS &amp; CRIME INTELLIGENCE SYSTEM
+                </div>
+                <h1>
+                    SECURE
+                    <span>JUSTICE.</span>
+                </h1>
+                <p>
+                    A centralized, database-backed intelligence platform managing citizen complaints,
+                    field incidents, registered FIRs, criminal investigations, evidentiary chain of custody,
+                    and judicial court proceedings in real time.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn btn-filled" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">
+                        EXPLORE SERVICES
+                    </button>
+                    <button class="btn" onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'})">
+                        VIEW CRIME MAP
+                    </button>
+                    <button class="btn btn-teal" onclick="switchView('reports')">
+                        <i class="fa-solid fa-chart-pie"></i> ANALYTICS &amp; REPORTS
+                    </button>
+                </div>
+            </div>
+            <div class="hero-symbol">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+        </section>
+
+        <!-- Quick Action Bar -->
+        <div class="quick-action-bar">
+            <div class="quick-action-title">
+                <i class="fa-solid fa-bolt"></i> Quick Operational Actions
+            </div>
+            <div class="quick-buttons">
+                <button class="btn btn-sm btn-filled" onclick="openAddComplaintModal()">
+                    <i class="fa-solid fa-plus"></i> Register Complaint
+                </button>
+                <button class="btn btn-sm" onclick="openAddIncidentModal()">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Add Incident
+                </button>
+                <button class="btn btn-sm" onclick="openRegisterFirModal()">
+                    <i class="fa-solid fa-file-lines"></i> Register FIR
+                </button>
+                <button class="btn btn-sm btn-teal" onclick="openCreateCaseModal()">
+                    <i class="fa-solid fa-folder-plus"></i> Create Case
+                </button>
+                <button class="btn btn-sm" onclick="openAddCitizenModal()">
+                    <i class="fa-solid fa-user-plus"></i> Register Citizen
+                </button>
+            </div>
+        </div>
+
+        <!-- Services Grid (Original Aesthetics with Interactive Workspaces) -->
+        <section class="services" id="services">
+            <div class="section-title">
+                <small>DATABASE-BACKED SERVICES</small>
+                <h2>POLICE SERVICES</h2>
+                <p>Click any operational service module to access real-time database records, filters, and workflows.</p>
+            </div>
+
+            <div class="service-grid">
+                <!-- Complaint -->
+                <div class="service-card" onclick="switchView('complaints')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-file-circle-exclamation"></i>
+                    </div>
+                    <h3>COMPLAINTS</h3>
+                    <p>Register and manage citizen complaints, review narratives, and track operational progress.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Incident -->
+                <div class="service-card" onclick="switchView('incidents')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h3>INCIDENTS</h3>
+                    <p>Track reported incidents, crime severity, verified coordinates, and conversion to FIRs.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- FIR -->
+                <div class="service-card" onclick="switchView('firs')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <h3>FIR</h3>
+                    <p>Access registered FIRs, legal sections, registration dates, and linked case files.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Cases -->
+                <div class="service-card" onclick="switchView('cases')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <h3>CASE MANAGEMENT</h3>
+                    <p>Manage investigations, officer assignments, status transitions, and timeline histories.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Evidence -->
+                <div class="service-card" onclick="switchView('evidence')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-fingerprint"></i>
+                    </div>
+                    <h3>EVIDENCE</h3>
+                    <p>Track seized property, forensics, secure locker locations, and chain-of-custody logs.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Officers -->
+                <div class="service-card" onclick="switchView('officers')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3>OFFICERS</h3>
+                    <p>Manage police personnel, duty ranks, station assignments, and case workloads.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Police Stations -->
+                <div class="service-card" onclick="switchView('stations')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-building-shield"></i>
+                    </div>
+                    <h3>POLICE STATIONS</h3>
+                    <p>View jurisdictional areas, station commands, assigned officers, and communication desks.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Court -->
+                <div class="service-card" onclick="switchView('court')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h3>COURT PROCEEDINGS</h3>
+                    <p>Track upcoming hearing dates, trial judges, chargesheets, and courtroom verdicts.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Citizens -->
+                <div class="service-card" onclick="switchView('citizens')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3>CITIZEN DIRECTORY</h3>
+                    <p>Search registered citizens, verify contact records, and view their submitted complaints.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- People / Suspects / Witnesses -->
+                <div class="service-card" onclick="switchView('persons')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <h3>PERSONS DOSSIER</h3>
+                    <p>Comprehensive repository of Victims, Suspects, and Witnesses linked to criminal cases.</p>
+                    <div class="service-arrow">MANAGE &rarr;</div>
+                </div>
+
+                <!-- Crime Map -->
+                <div class="service-card" onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'})">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                    </div>
+                    <h3>CRIME MAP</h3>
+                    <p>Interactive spatial mapping displaying live incidents across city jurisdictions with severity markers.</p>
+                    <div class="service-arrow">VIEW MAP &rarr;</div>
+                </div>
+
+                <!-- Reports -->
+                <div class="service-card" onclick="switchView('reports')">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-chart-column"></i>
+                    </div>
+                    <h3>INTELLIGENCE REPORTS</h3>
+                    <p>Specialized SQL queries, workload distributions, unassigned cases, and CSV export exports.</p>
+                    <div class="service-arrow">REPORTS &rarr;</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Statistics Counter (Backend.sql Queries) -->
+        <section style="padding-top: 0; padding-bottom: 0;">
+            <div class="stats">
+                <div class="stat">
+                    <i class="fa-solid fa-folder"></i>
+                    <h3 id="stat-total-cases">--</h3>
+                    <p>Total Cases</p>
+                </div>
+                <div class="stat">
+                    <i class="fa-solid fa-spinner"></i>
+                    <h3 id="stat-active-cases">--</h3>
+                    <p>Active Cases</p>
+                </div>
+                <div class="stat">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                    <h3 id="stat-total-firs">--</h3>
+                    <p>FIR Registered</p>
+                </div>
+                <div class="stat">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <h3 id="stat-active-officers">--</h3>
+                    <p>Active Officers</p>
+                </div>
+            </div>
+
+            <!-- Sub-statistics row for secondary metrics -->
+            <div class="sub-stats-grid">
+                <div class="sub-stat-item">
+                    <strong id="stat-total-citizens">--</strong>
+                    <span>Total Citizens</span>
+                </div>
+                <div class="sub-stat-item">
+                    <strong id="stat-total-complaints">--</strong>
+                    <span>Total Complaints</span>
+                </div>
+                <div class="sub-stat-item">
+                    <strong id="stat-total-incidents">--</strong>
+                    <span>Total Incidents</span>
+                </div>
+                <div class="sub-stat-item">
+                    <strong id="stat-total-evidence">--</strong>
+                    <span>Evidence Exhibits</span>
+                </div>
+                <div class="sub-stat-item">
+                    <strong id="stat-upcoming-hearings">--</strong>
+                    <span>Upcoming Hearings</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crime Map Section (Preserving Leaflet with Live Stored Coordinates) -->
+        <section class="map-section" id="map-section">
+            <div class="section-title">
+                <small>LOCATION INTELLIGENCE</small>
+                <h2>CRIME MAP</h2>
+                <p>Real-time geographic visualization of incidents using verified latitude and longitude records from the database.</p>
+            </div>
+
+            <div class="map-container">
+                <!-- Floating Info Overlay -->
+                <div class="map-overlay">
+                    <h3>INDIA CRIME MONITOR</h3>
+                    <p>Live incident locations across active police jurisdictions.</p>
+                    <div class="map-stat">
+                        <strong>ACTIVE CASES</strong>
+                        <span id="map-stat-active">--</span>
+                    </div>
+                    <div class="map-stat">
+                        <strong>HIGH SEVERITY</strong>
+                        <span id="map-stat-high">--</span>
+                    </div>
+                    <div class="map-stat">
+                        <strong>LOCATIONS</strong>
+                        <span id="map-stat-locations">--</span>
+                    </div>
+                </div>
+
+                <!-- Floating Filter Toolbar -->
+                <div class="map-controls-panel">
+                    <select id="map-filter-severity" class="map-filter-select" onchange="loadMapIncidents()">
+                        <option value="">All Severities</option>
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <select id="map-filter-status" class="map-filter-select" onchange="loadMapIncidents()">
+                        <option value="">All Statuses</option>
+                        <option value="Reported">Reported</option>
+                        <option value="Under Investigation">Under Investigation</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                    <button class="btn btn-sm btn-teal" onclick="loadMapIncidents()">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                </div>
+
+                <!-- Map Legend -->
+                <div class="map-legend">
+                    <div class="legend-item"><span class="legend-dot dot-critical"></span> Critical</div>
+                    <div class="legend-item"><span class="legend-dot dot-high"></span> High</div>
+                    <div class="legend-item"><span class="legend-dot dot-medium"></span> Medium</div>
+                    <div class="legend-item"><span class="legend-dot dot-low"></span> Low</div>
+                </div>
+
+                <!-- Leaflet DOM Container -->
+                <div id="map"></div>
+            </div>
+        </section>
+
+        <!-- Recent Cases Section (Backend.sql Query lines 516-538) -->
+        <section class="cases" id="cases">
+            <div class="section-title">
+                <small>LIVE INVESTIGATION</small>
+                <h2>RECENT CASES</h2>
+                <p>Latest registered and ongoing investigations linked to FIR records and assigned officers.</p>
+            </div>
+
+            <div class="case-layout" id="recent-cases-grid">
+                <!-- Dynamically populated from /api/dashboard/recent-cases -->
+            </div>
+        </section>
+
+    </div><!-- /#view-home -->
+
+
+    <!-- =====================================================
+         MODULE VIEWS (MANAGEMENT WORKSPACES)
+    ====================================================== -->
+
+    <!-- MODULE 1: COMPLAINTS -->
+    <div id="view-complaints" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>CITIZEN COMPLAINT REGISTRY</small>
+                <h2>COMPLAINTS MANAGEMENT</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddComplaintModal()">
+                <i class="fa-solid fa-plus"></i> Register New Complaint
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-complaints" class="filter-input" placeholder="Search narrative, citizen..." onkeyup="if(event.key==='Enter') loadComplaints()">
+                <select id="filter-complaint-status" class="filter-input" onchange="loadComplaints()">
+                    <option value="">All Statuses</option>
+                    <option value="Received">Received</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Converted to Incident">Converted to Incident</option>
+                    <option value="Closed">Closed</option>
+                </select>
+                <button class="btn btn-sm btn-teal" onclick="loadComplaints()">Filter</button>
+            </div>
+            <button class="btn btn-sm" onclick="exportReport('complaints-without-incidents')">
+                <i class="fa-solid fa-file-csv"></i> Export Unconverted
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Citizen</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Filed Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-complaints-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 2: INCIDENTS -->
+    <div id="view-incidents" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>OPERATIONAL DISPATCH</small>
+                <h2>INCIDENT MANAGEMENT</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddIncidentModal()">
+                <i class="fa-solid fa-plus"></i> Add Incident Record
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-incidents" class="filter-input" placeholder="Search description, city..." onkeyup="if(event.key==='Enter') loadIncidents()">
+                <select id="filter-incident-severity" class="filter-input" onchange="loadIncidents()">
+                    <option value="">All Severities</option>
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <select id="filter-incident-status" class="filter-input" onchange="loadIncidents()">
+                    <option value="">All Statuses</option>
+                    <option value="Reported">Reported</option>
+                    <option value="Under Investigation">Under Investigation</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                </select>
+                <button class="btn btn-sm btn-teal" onclick="loadIncidents()">Filter</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Severity</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Reported Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-incidents-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 3: FIR -->
+    <div id="view-firs" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>LEGAL RECORDS</small>
+                <h2>FIRST INFORMATION REPORTS (FIR)</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openRegisterFirModal()">
+                <i class="fa-solid fa-plus"></i> Register FIR
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-firs" class="filter-input" placeholder="Search FIR #, sections..." onkeyup="if(event.key==='Enter') loadFirs()">
+                <button class="btn btn-sm btn-teal" onclick="loadFirs()">Search</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>FIR Number</th>
+                        <th>Incident</th>
+                        <th>Legal Sections</th>
+                        <th>Registered Date</th>
+                        <th>Linked Case</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-firs-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 4: CASES -->
+    <div id="view-cases" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>CRIMINAL INVESTIGATION</small>
+                <h2>POLICE CASE MANAGEMENT</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openCreateCaseModal()">
+                <i class="fa-solid fa-plus"></i> Create Police Case
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-cases" class="filter-input" placeholder="Search case type, officer, FIR..." onkeyup="if(event.key==='Enter') loadCases()">
+                <select id="filter-case-status" class="filter-input" onchange="loadCases()">
+                    <option value="">All Statuses</option>
+                    <option value="Registered">Registered</option>
+                    <option value="Investigation">Investigation</option>
+                    <option value="Under Trial">Under Trial</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                </select>
+                <button class="btn btn-sm btn-teal" onclick="loadCases()">Filter</button>
+            </div>
+            <button class="btn btn-sm" onclick="exportReport('cases-without-officers')">
+                <i class="fa-solid fa-file-csv"></i> Export Unassigned Cases
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Case ID</th>
+                        <th>Case Type</th>
+                        <th>FIR Reference</th>
+                        <th>Status</th>
+                        <th>Assigned Officers</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-cases-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 5: EVIDENCE -->
+    <div id="view-evidence" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>PROPERTY &amp; FORENSICS</small>
+                <h2>EVIDENCE &amp; CUSTODY REPOSITORY</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddEvidenceModal()">
+                <i class="fa-solid fa-plus"></i> Log Evidence Item
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-evidence" class="filter-input" placeholder="Search exhibit, description..." onkeyup="if(event.key==='Enter') loadEvidence()">
+                <select id="filter-evidence-status" class="filter-input" onchange="loadEvidence()">
+                    <option value="">All Statuses</option>
+                    <option value="Collected">Collected</option>
+                    <option value="In Storage">In Storage</option>
+                    <option value="Under Examination">Under Examination</option>
+                    <option value="Released">Released</option>
+                    <option value="Disposed">Disposed</option>
+                </select>
+                <button class="btn btn-sm btn-teal" onclick="loadEvidence()">Filter</button>
+            </div>
+            <button class="btn btn-sm" onclick="exportReport('evidence-awaiting-examination')">
+                <i class="fa-solid fa-file-csv"></i> Export Pending Forensics
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Exhibit #</th>
+                        <th>Type &amp; Description</th>
+                        <th>Linked Case</th>
+                        <th>Collecting Officer</th>
+                        <th>Storage Location</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-evidence-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 6: OFFICERS -->
+    <div id="view-officers" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>PERSONNEL DIRECTORY</small>
+                <h2>POLICE OFFICERS</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddOfficerModal()">
+                <i class="fa-solid fa-user-plus"></i> Register Police Officer
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-officers" class="filter-input" placeholder="Search name, badge #..." onkeyup="if(event.key==='Enter') loadOfficers()">
+                <button class="btn btn-sm btn-teal" onclick="loadOfficers()">Search</button>
+            </div>
+            <button class="btn btn-sm" onclick="exportReport('officer-workload')">
+                <i class="fa-solid fa-file-csv"></i> Export Workload Report
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Badge #</th>
+                        <th>Name</th>
+                        <th>Rank</th>
+                        <th>Police Station</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-officers-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 7: COURT PROCEEDINGS -->
+    <div id="view-court" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>JUDICIAL SCHEDULE</small>
+                <h2>COURT PROCEEDINGS &amp; HEARINGS</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openScheduleHearingModal()">
+                <i class="fa-solid fa-calendar-plus"></i> Schedule Hearing
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <button class="btn btn-sm btn-teal" onclick="loadCourtProceedings(false)">All Proceedings</button>
+                <button class="btn btn-sm btn-filled" onclick="loadCourtProceedings(true)">
+                    <i class="fa-solid fa-clock"></i> Upcoming Hearings Only
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Court Name</th>
+                        <th>Case Reference</th>
+                        <th>Hearing Date</th>
+                        <th>Presiding Judge</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-court-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 8: CITIZENS -->
+    <div id="view-citizens" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>PUBLIC REGISTRY</small>
+                <h2>CITIZEN MANAGEMENT</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddCitizenModal()">
+                <i class="fa-solid fa-user-plus"></i> Register Citizen
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <input type="text" id="search-citizens" class="filter-input" placeholder="Search citizen name, phone..." onkeyup="if(event.key==='Enter') loadCitizens()">
+                <button class="btn btn-sm btn-teal" onclick="loadCitizens()">Search</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Complaints</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-citizens-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 9: PERSONS, VICTIMS, SUSPECTS & WITNESSES -->
+    <div id="view-persons" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>INVESTIGATION DOSSIER</small>
+                <h2>PERSONS, VICTIMS, SUSPECTS &amp; WITNESSES</h2>
+            </div>
+            <button class="btn btn-filled" onclick="openAddPersonModal()">
+                <i class="fa-solid fa-user-plus"></i> Register Person Record
+            </button>
+        </div>
+
+        <div class="module-toolbar">
+            <div class="filter-group">
+                <button class="btn btn-sm btn-teal" onclick="loadPersons('')">All People</button>
+                <button class="btn btn-sm" onclick="loadPersons('victim')">Victims</button>
+                <button class="btn btn-sm btn-danger" onclick="loadPersons('suspect')">Suspects</button>
+                <button class="btn btn-sm" onclick="loadPersons('witness')">Witnesses</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Role Associations</th>
+                        <th>Address</th>
+                        <th>Case Links</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-persons-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 10: POLICE STATIONS -->
+    <div id="view-stations" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>COMMAND CENTERS</small>
+                <h2>POLICE STATIONS &amp; JURISDICTIONS</h2>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Station Name</th>
+                        <th>City</th>
+                        <th>Area</th>
+                        <th>Emergency Phone</th>
+                        <th>Stationed Officers</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="table-stations-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODULE 11: REPORTS & ANALYTICS -->
+    <div id="view-reports" class="module-view">
+        <div class="module-header">
+            <div class="module-header-title">
+                <small>CRIME INTELLIGENCE</small>
+                <h2>SYSTEM REPORTS &amp; ANALYTICS</h2>
+            </div>
+            <button class="btn btn-filled" onclick="loadReports()">
+                <i class="fa-solid fa-arrows-rotate"></i> Refresh Analytics
+            </button>
+        </div>
+
+        <!-- Metric Distribution Cards -->
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px; margin-bottom:30px;">
+            <div style="background:#11151b; border:1px solid var(--border); padding:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="color:var(--aqua); font-size:12px; text-transform:uppercase; letter-spacing:1px;">Complaints by Status</h4>
+                    <button class="btn btn-sm" onclick="exportReport('complaints-by-status')"><i class="fa-solid fa-download"></i></button>
+                </div>
+                <div id="report-complaints-status">Loading...</div>
+            </div>
+
+            <div style="background:#11151b; border:1px solid var(--border); padding:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="color:var(--aqua); font-size:12px; text-transform:uppercase; letter-spacing:1px;">Incidents by Severity</h4>
+                    <button class="btn btn-sm" onclick="exportReport('incidents-by-severity')"><i class="fa-solid fa-download"></i></button>
+                </div>
+                <div id="report-incidents-severity">Loading...</div>
+            </div>
+
+            <div style="background:#11151b; border:1px solid var(--border); padding:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="color:var(--aqua); font-size:12px; text-transform:uppercase; letter-spacing:1px;">Cases by Status</h4>
+                    <button class="btn btn-sm" onclick="exportReport('cases-by-status')"><i class="fa-solid fa-download"></i></button>
+                </div>
+                <div id="report-cases-status">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Forensics Pending Examination -->
+        <div style="background:#11151b; border:1px solid var(--border); padding:20px; margin-bottom:30px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h4 style="color:var(--white); font-size:13px; text-transform:uppercase; letter-spacing:1px;">
+                    <i class="fa-solid fa-flask" style="color:var(--aqua); margin-right:8px;"></i> Evidence Exhibits Awaiting Examination (Backend Query)
+                </h4>
+                <button class="btn btn-sm btn-teal" onclick="exportReport('evidence-awaiting-examination')">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Exhibit #</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Linked Case</th>
+                            <th>Collected By</th>
+                            <th>Storage</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-report-evidence-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Officer Workload Distribution -->
+        <div style="background:#11151b; border:1px solid var(--border); padding:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h4 style="color:var(--white); font-size:13px; text-transform:uppercase; letter-spacing:1px;">
+                    <i class="fa-solid fa-briefcase" style="color:var(--aqua); margin-right:8px;"></i> Officer Case Load &amp; Evidence Workload (Aggregated)
+                </h4>
+                <button class="btn btn-sm btn-teal" onclick="exportReport('officer-workload')">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Badge #</th>
+                            <th>Officer</th>
+                            <th>Rank</th>
+                            <th>Station</th>
+                            <th>Active Cases</th>
+                            <th>Evidence Exhibits</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-report-workload-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-logo">
+                POLICE<span>INTEL</span>
+            </div>
+            <p>Police Operations &amp; Crime Intelligence System &bull; Academic Demonstration Platform</p>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Police Intelligence System. Integrated with MySQL backend and OpenStreetMap.
+        </div>
+    </footer>
+
+
+    <!-- =====================================================
+         MODALS & DIALOGS
+    ====================================================== -->
+
+    <!-- 1. UNIVERSAL RECORD DETAILS DRAWER -->
+    <div id="modal-details" class="modal-backdrop">
+        <div class="modal-card modal-lg">
+            <div class="modal-header">
+                <h3 id="modal-details-title">RECORD DETAILS</h3>
+                <button class="modal-close" onclick="Modal.close('modal-details')">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-details-body">
+                <!-- Dynamically populated -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-teal" onclick="Modal.close('modal-details')">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. LOGIN MODAL WITH QUICK-ROLE SWITCHER -->
+    <div id="modal-login" class="modal-backdrop">
+        <div class="modal-card" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3>SYSTEM <span>AUTHENTICATION</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-login')">&times;</button>
+            </div>
+            <form id="form-login">
+                <div class="modal-body">
+                    <p style="font-size:12px; color:#888; margin-bottom:15px;">
+                        Sign in with role-based credentials. Click a role below for instant demo login:
+                    </p>
+
+                    <!-- Quick role fill pills -->
+                    <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-sm btn-teal" onclick="quickFillLogin('admin', 'admin123')">Admin</button>
+                        <button type="button" class="btn btn-sm btn-teal" onclick="quickFillLogin('officer1', 'officer123')">Officer</button>
+                        <button type="button" class="btn btn-sm btn-teal" onclick="quickFillLogin('investigator1', 'investigator123')">Investigator</button>
+                        <button type="button" class="btn btn-sm btn-teal" onclick="quickFillLogin('reviewer1', 'reviewer123')">Reviewer</button>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="login-username" class="form-control" required placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="login-password" class="form-control" required placeholder="Enter password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-login')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Authenticate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. TRANSACTIONAL CASE STATUS UPDATE MODAL (Backend.sql lines 770-786) -->
+    <div id="modal-case-status" class="modal-backdrop">
+        <div class="modal-card" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3>UPDATE <span>CASE STATUS</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-case-status')">&times;</button>
+            </div>
+            <form id="form-case-status">
+                <input type="hidden" id="status-case-id">
+                <div class="modal-body">
+                    <p style="font-size:12px; color:#8892b0; margin-bottom:15px;">
+                        This action executes a single atomic MySQL database transaction: updating <code>police_case</code> and recording an entry in <code>case_status_history</code>.
+                    </p>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">New Case Status <span class="required">*</span></label>
+                        <select id="status-select" class="form-control" required>
+                            <option value="Registered">Registered</option>
+                            <option value="Investigation">Investigation</option>
+                            <option value="Under Trial">Under Trial</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Investigation Remarks / Transition Notes</label>
+                        <textarea id="status-remarks" class="form-control" placeholder="Provide reason or progress remarks..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-case-status')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Commit Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. CONVERT COMPLAINT TO INCIDENT MODAL (Backend.sql lines 381-389) -->
+    <div id="modal-convert-incident" class="modal-backdrop">
+        <div class="modal-card" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3>CONVERT TO <span>INCIDENT</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-convert-incident')">&times;</button>
+            </div>
+            <form id="form-convert-incident">
+                <input type="hidden" id="convert-complaint-id">
+                <div class="modal-body">
+                    <p style="font-size:12px; color:#888; margin-bottom:15px;">
+                        Generates a formal operational incident record linked to the complaint and sets complaint status to 'Converted to Incident'.
+                    </p>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Severity Level <span class="required">*</span></label>
+                        <select id="convert-severity" class="form-control" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Initial Operational Assessment / Description</label>
+                        <textarea id="convert-description" class="form-control" placeholder="Operational assessment notes..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-convert-incident')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Generate Incident</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 5. LOG EVIDENCE CUSTODY TRANSFER MODAL -->
+    <div id="modal-custody-transfer" class="modal-backdrop">
+        <div class="modal-card" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3>RECORD <span>CHAIN OF CUSTODY</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-custody-transfer')">&times;</button>
+            </div>
+            <form id="form-custody-transfer">
+                <input type="hidden" id="custody-evidence-id">
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Custody Action Type <span class="required">*</span></label>
+                        <select id="custody-action-type" class="form-control" required>
+                            <option value="Transferred to Evidence Room">Transferred to Evidence Room</option>
+                            <option value="Sent for Forensic Lab Examination">Sent for Forensic Lab Examination</option>
+                            <option value="Returned to Storage">Returned to Storage</option>
+                            <option value="Presented in Court">Presented in Court</option>
+                            <option value="Released to Owner">Released to Owner</option>
+                            <option value="Disposed">Disposed</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Responsible Handling Officer <span class="required">*</span></label>
+                        <select id="custody-officer" class="form-control" required></select>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">From Location</label>
+                            <input type="text" id="custody-from" class="form-control" placeholder="e.g. Crime Scene / Desk">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To Location</label>
+                            <input type="text" id="custody-to" class="form-control" placeholder="e.g. Locker Vault A / FSL Lab">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transfer Remarks</label>
+                        <textarea id="custody-remarks" class="form-control" placeholder="Verification notes, seal numbers..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-custody-transfer')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Record Custody Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 6. GLOBAL SEARCH OVERLAY MODAL -->
+    <div id="modal-search" class="modal-backdrop">
+        <div class="modal-card modal-lg">
+            <div class="modal-header">
+                <h3>SEARCH RESULTS FOR <span id="search-modal-query">"..."</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-search')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="search-results-list" class="search-results-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-teal" onclick="Modal.close('modal-search')">Close Search</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. REGISTER COMPLAINT MODAL -->
+    <div id="modal-add-complaint" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>REGISTER <span>COMPLAINT</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-complaint')">&times;</button>
+            </div>
+            <form id="form-add-complaint" onsubmit="handleAddComplaint(event)">
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Citizen Complainant <span class="required">*</span></label>
+                        <select id="complaint-citizen-id" class="form-control" required></select>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Complaint Type <span class="required">*</span></label>
+                            <input type="text" id="complaint-type" class="form-control" required placeholder="e.g. Theft, Cyber Fraud, Assault">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Incident Location</label>
+                            <select id="complaint-location-id" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Detailed Incident Narrative <span class="required">*</span></label>
+                        <textarea id="complaint-description" class="form-control" required placeholder="Describe what occurred, items involved, suspects..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-complaint')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Submit Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 8. REGISTER INCIDENT MODAL -->
+    <div id="modal-add-incident" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>LOG <span>INCIDENT</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-incident')">&times;</button>
+            </div>
+            <form id="form-add-incident" onsubmit="handleAddIncident(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Origin Complaint ID <span class="required">*</span></label>
+                            <input type="number" id="incident-complaint-id" class="form-control" required placeholder="Complaint #">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Incident Type <span class="required">*</span></label>
+                            <input type="text" id="incident-type-input" class="form-control" required placeholder="e.g. Robbery, Burglary">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Severity <span class="required">*</span></label>
+                            <select id="incident-severity-input" class="form-control" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Location (With GPS)</label>
+                            <select id="incident-location-id" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="incident-description-input" class="form-control" placeholder="Operational report..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-incident')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Log Incident</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 9. REGISTER FIR MODAL -->
+    <div id="modal-add-fir" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>REGISTER <span>FIR</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-fir')">&times;</button>
+            </div>
+            <form id="form-add-fir" onsubmit="handleAddFir(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Incident ID <span class="required">*</span></label>
+                            <input type="number" id="fir-incident-id" class="form-control" required placeholder="Incident #">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">FIR Number (Leave empty to auto-generate)</label>
+                            <input type="text" id="fir-number-input" class="form-control" placeholder="e.g. FIR/MUM/2026/010">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Applicable Legal Sections</label>
+                        <input type="text" id="fir-sections-input" class="form-control" placeholder="e.g. BNS Section 309, 318(4)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">FIR Details / Charges</label>
+                        <textarea id="fir-details-input" class="form-control" placeholder="Comprehensive FIR narrative..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-fir')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Register FIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 10. CREATE CASE MODAL -->
+    <div id="modal-add-case" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>CREATE <span>POLICE CASE</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-case')">&times;</button>
+            </div>
+            <form id="form-add-case" onsubmit="handleAddCase(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">FIR ID <span class="required">*</span></label>
+                            <input type="number" id="case-fir-id" class="form-control" required placeholder="FIR #">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Case Type <span class="required">*</span></label>
+                            <input type="text" id="case-type-input" class="form-control" required placeholder="e.g. Theft Case, Homicide Investigation">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Lead Investigating Officer</label>
+                            <select id="case-initial-officer" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Initial Status</label>
+                            <select id="case-initial-status" class="form-control">
+                                <option value="Registered">Registered</option>
+                                <option value="Investigation" selected>Investigation</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-case')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Open Case</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 11. LOG EVIDENCE MODAL -->
+    <div id="modal-add-evidence" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>LOG <span>EVIDENCE EXHIBIT</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-evidence')">&times;</button>
+            </div>
+            <form id="form-add-evidence" onsubmit="handleAddEvidence(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Police Case ID <span class="required">*</span></label>
+                            <input type="number" id="evidence-case-id" class="form-control" required placeholder="Case #">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Evidence Type <span class="required">*</span></label>
+                            <input type="text" id="evidence-type-input" class="form-control" required placeholder="e.g. Physical Property, Weapon, Digital Media">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Collecting Officer <span class="required">*</span></label>
+                            <select id="evidence-collected-by" class="form-control" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Secure Storage Location</label>
+                            <select id="evidence-storage-loc-id" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Property Description &amp; Identifying Marks</label>
+                        <textarea id="evidence-description-input" class="form-control" placeholder="Detailed property description, serial number, condition..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-evidence')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Log Evidence</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 12. REGISTER CITIZEN MODAL -->
+    <div id="modal-add-citizen" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>REGISTER <span>CITIZEN</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-citizen')">&times;</button>
+            </div>
+            <form id="form-add-citizen" onsubmit="handleAddCitizen(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Full Name <span class="required">*</span></label>
+                            <input type="text" id="citizen-name-input" class="form-control" required placeholder="Full Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" id="citizen-phone-input" class="form-control" placeholder="10-digit mobile">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="citizen-email-input" class="form-control" placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select id="citizen-gender-input" class="form-control">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <textarea id="citizen-address-input" class="form-control" placeholder="Residential address..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-citizen')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Register Citizen</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 13. REGISTER PERSON DOSSIER MODAL -->
+    <div id="modal-add-person" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>REGISTER <span>PERSON RECORD</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-person')">&times;</button>
+            </div>
+            <form id="form-add-person" onsubmit="handleAddPerson(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Full Name <span class="required">*</span></label>
+                            <input type="text" id="person-name-input" class="form-control" required placeholder="Person Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" id="person-phone-input" class="form-control" placeholder="Phone">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Specialized Role</label>
+                        <div style="display:flex; gap:15px; margin-top:5px;">
+                            <label style="font-size:12px; color:#ddd;"><input type="checkbox" id="person-is-victim"> Victim</label>
+                            <label style="font-size:12px; color:#ddd;"><input type="checkbox" id="person-is-suspect"> Suspect</label>
+                            <label style="font-size:12px; color:#ddd;"><input type="checkbox" id="person-is-witness"> Witness</label>
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Alias / Street Name (If Suspect)</label>
+                            <input type="text" id="person-alias-input" class="form-control" placeholder='e.g. "Kalia"'>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Case ID Association (Optional)</label>
+                            <input type="number" id="person-case-id-input" class="form-control" placeholder="Case #">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Criminal History / Prior Convictions</label>
+                        <textarea id="person-history-input" class="form-control" placeholder="Prior arrest records or notes..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Witness Statement / Testimony</label>
+                        <textarea id="person-statement-input" class="form-control" placeholder="Witness observations..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-person')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Save Person Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 14. ASSIGN OFFICER MODAL -->
+    <div id="modal-assign-officer" class="modal-backdrop">
+        <div class="modal-card" style="max-width:480px;">
+            <div class="modal-header">
+                <h3>ASSIGN <span>OFFICER TO CASE</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-assign-officer')">&times;</button>
+            </div>
+            <form id="form-assign-officer" onsubmit="handleAssignOfficer(event)">
+                <input type="hidden" id="assign-case-id">
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom:15px;">
+                        <label class="form-label">Select Officer <span class="required">*</span></label>
+                        <select id="assign-officer-id" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Assignment Role</label>
+                        <input type="text" id="assign-role-input" class="form-control" value="Investigating Officer">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-assign-officer')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Assign Officer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 15. SCHEDULE COURT HEARING MODAL -->
+    <div id="modal-add-court" class="modal-backdrop">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>SCHEDULE <span>COURT PROCEEDING</span></h3>
+                <button class="modal-close" onclick="Modal.close('modal-add-court')">&times;</button>
+            </div>
+            <form id="form-add-court" onsubmit="handleAddCourt(event)">
+                <div class="modal-body">
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Case ID <span class="required">*</span></label>
+                            <input type="number" id="court-case-id" class="form-control" required placeholder="Case #">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Court Name <span class="required">*</span></label>
+                            <input type="text" id="court-name-input" class="form-control" required placeholder="e.g. Sessions Court 4">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:15px;">
+                        <div class="form-group">
+                            <label class="form-label">Hearing Date &amp; Time <span class="required">*</span></label>
+                            <input type="datetime-local" id="court-date-input" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Presiding Judge</label>
+                            <input type="text" id="court-judge-input" class="form-control" placeholder="Judge Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hearing Remarks</label>
+                        <textarea id="court-remarks-input" class="form-control" placeholder="Purpose of hearing, bail plea, framing of charges..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm" onclick="Modal.close('modal-add-court')">Cancel</button>
+                    <button type="submit" class="btn btn-sm btn-filled">Schedule Hearing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Application Scripts -->
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+
+    <script>
+        // Additional quick form helper handlers
+        function openAddComplaintModal() { Modal.open('modal-add-complaint'); }
+        function openAddIncidentModal() { Modal.open('modal-add-incident'); }
+        function openAddEvidenceModal(caseId = null) {
+            if (caseId) document.getElementById('evidence-case-id').value = caseId;
+            Modal.open('modal-add-evidence');
+        }
+        function openAddCitizenModal() { Modal.open('modal-add-citizen'); }
+        function openAddPersonModal() { Modal.open('modal-add-person'); }
+        function openScheduleHearingModal(caseId = null) {
+            if (caseId) document.getElementById('court-case-id').value = caseId;
+            Modal.open('modal-add-court');
+        }
+        function openAssignOfficerModal(caseId) {
+            document.getElementById('assign-case-id').value = caseId;
+            Modal.open('modal-assign-officer');
+        }
+
+        async function handleAddComplaint(e) {
+            e.preventDefault();
+            const citizen_id = document.getElementById('complaint-citizen-id').value;
+            const type = document.getElementById('complaint-type').value;
+            const location_id = document.getElementById('complaint-location-id').value;
+            const description = document.getElementById('complaint-description').value;
+
+            try {
+                const res = await API.createComplaint({ citizen_id, type, location_id, description });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-complaint');
+                loadComplaints();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddIncident(e) {
+            e.preventDefault();
+            const complaint_id = document.getElementById('incident-complaint-id').value;
+            const type = document.getElementById('incident-type-input').value;
+            const severity = document.getElementById('incident-severity-input').value;
+            const location_id = document.getElementById('incident-location-id').value;
+            const description = document.getElementById('incident-description-input').value;
+
+            try {
+                const res = await API.createIncident({ complaint_id, type, severity, location_id, description });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-incident');
+                loadIncidents();
+                loadDashboardData();
+                loadMapIncidents();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddFir(e) {
+            e.preventDefault();
+            const incident_id = document.getElementById('fir-incident-id').value;
+            const fir_number = document.getElementById('fir-number-input').value;
+            const sections = document.getElementById('fir-sections-input').value;
+            const details = document.getElementById('fir-details-input').value;
+
+            try {
+                const res = await API.createFir({ incident_id, fir_number, sections, details });
+                showToast(`FIR ${res.fir_number} registered successfully!`, 'success');
+                Modal.close('modal-add-fir');
+                loadFirs();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddCase(e) {
+            e.preventDefault();
+            const fir_id = document.getElementById('case-fir-id').value;
+            const case_type = document.getElementById('case-type-input').value;
+            const initial_officer_id = document.getElementById('case-initial-officer').value;
+            const status = document.getElementById('case-initial-status').value;
+
+            try {
+                const res = await API.createCase({ fir_id, case_type, initial_officer_id, status });
+                showToast(`Police Case #${res.case_id} opened successfully!`, 'success');
+                Modal.close('modal-add-case');
+                loadCases();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddEvidence(e) {
+            e.preventDefault();
+            const case_id = document.getElementById('evidence-case-id').value;
+            const type = document.getElementById('evidence-type-input').value;
+            const collected_by = document.getElementById('evidence-collected-by').value;
+            const evidence_loc_id = document.getElementById('evidence-storage-loc-id').value;
+            const description = document.getElementById('evidence-description-input').value;
+
+            try {
+                const res = await API.createEvidence({ case_id, type, collected_by, evidence_loc_id, description });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-evidence');
+                loadEvidence();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddCitizen(e) {
+            e.preventDefault();
+            const name = document.getElementById('citizen-name-input').value;
+            const phone = document.getElementById('citizen-phone-input').value;
+            const email = document.getElementById('citizen-email-input').value;
+            const gender = document.getElementById('citizen-gender-input').value;
+            const address = document.getElementById('citizen-address-input').value;
+
+            try {
+                const res = await API.createCitizen({ name, phone, email, gender, address });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-citizen');
+                loadCitizens();
+                preloadDropdownData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddPerson(e) {
+            e.preventDefault();
+            const name = document.getElementById('person-name-input').value;
+            const phone = document.getElementById('person-phone-input').value;
+            const is_victim = document.getElementById('person-is-victim').checked;
+            const is_suspect = document.getElementById('person-is-suspect').checked;
+            const is_witness = document.getElementById('person-is-witness').checked;
+            const alias = document.getElementById('person-alias-input').value;
+            const case_id = document.getElementById('person-case-id-input').value;
+            const criminal_history = document.getElementById('person-history-input').value;
+            const statement = document.getElementById('person-statement-input').value;
+
+            try {
+                const res = await API.createPerson({
+                    name, phone, is_victim, is_suspect, is_witness,
+                    alias, case_id: case_id || null, criminal_history, statement
+                });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-person');
+                loadPersons();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAssignOfficer(e) {
+            e.preventDefault();
+            const caseId = document.getElementById('assign-case-id').value;
+            const officer_id = document.getElementById('assign-officer-id').value;
+            const assignment_role = document.getElementById('assign-role-input').value;
+
+            try {
+                const res = await API.assignOfficer(caseId, { officer_id, assignment_role });
+                showToast(res.message, 'success');
+                Modal.close('modal-assign-officer');
+                openCaseDetails(caseId);
+                loadCases();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+
+        async function handleAddCourt(e) {
+            e.preventDefault();
+            const case_id = document.getElementById('court-case-id').value;
+            const court_name = document.getElementById('court-name-input').value;
+            const hearing_date = document.getElementById('court-date-input').value;
+            const judge_name = document.getElementById('court-judge-input').value;
+            const remarks = document.getElementById('court-remarks-input').value;
+
+            try {
+                const res = await API.createCourtProceeding({ case_id, court_name, hearing_date, judge_name, remarks });
+                showToast(res.message, 'success');
+                Modal.close('modal-add-court');
+                loadCourtProceedings();
+                loadDashboardData();
+            } catch (err) {
+                showToast(err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
